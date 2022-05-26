@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Nav,
   NavDropdown,
@@ -15,6 +15,13 @@ import { MDBCol, MDBIcon } from "mdbreact";
 
 function Header() {
   const [open, setOpen] = useState(true);
+  const myRef = useRef();
+
+  const handleClickOutside = (e) => {
+    if (!myRef.current.contains(e.target)) {
+      setOpen(true);
+    }
+  };
 
   const openDeiv = () => {
     if (open === true) {
@@ -23,6 +30,11 @@ function Header() {
       setOpen(true);
     }
   };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  });
 
   return (
     <header>
@@ -117,7 +129,12 @@ function Header() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto navheader">
-                <a onClick={openDeiv} className="alin mx-2" href="#">
+                <a
+                  ref={myRef}
+                  onClick={openDeiv}
+                  className="alin mx-2"
+                  href="#"
+                >
                   Browse Categories ⌄{" "}
                 </a>
 
